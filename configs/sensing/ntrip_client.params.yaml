@@ -5,7 +5,7 @@
       host: ntrip.hi-rtk.io
       port: 2101
       mountpoint: SNS_AUTO
-      username: sns
+      username: sns7
       password: "1234"
 
       ntrip_version: 'NTRIP/2.0'
