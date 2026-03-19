@@ -1,10 +1,12 @@
 #!/bin/bash
 
+set -e
+
 echo "delete remap the device serial ports of mowbot"
-sudo rm   /etc/udev/rules.d/mowbot_udev.rules
-echo " "
-echo "Restarting udev"
+sudo rm -f /etc/udev/rules.d/mowbot_udev.rules
 echo ""
-sudo service udev reload
-sudo service udev restart
-echo "finish  delete"
+echo "Reloading udev rules and triggering tty devices"
+echo ""
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=tty
+echo "finish delete"
