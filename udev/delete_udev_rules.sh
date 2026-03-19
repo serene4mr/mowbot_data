@@ -8,5 +8,5 @@ echo ""
 echo "Reloading udev rules and triggering tty devices"
 echo ""
 sudo udevadm control --reload-rules
-sudo udevadm trigger --subsystem-match=tty
+sudo udevadm trigger --subsystem-match=tty --action=add
 echo "finish delete"
