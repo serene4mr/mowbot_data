@@ -1,7 +1,7 @@
 /**:
   witmotion:
     ros__parameters:
-      port: /dev/HWT905
+      port: /dev/MB-HWT905
       # port: /dev/ttyUSB0
       baud_rate: 9600 # baud
       polling_interval: 5 # ms

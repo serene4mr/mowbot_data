@@ -1,4 +1,0 @@
-
-# Run link script on any ttyUSB add/remove event
-SUBSYSTEM=="tty", KERNEL=="ttyUSB*", ACTION=="add",    RUN+="/bin/bash /usr/local/bin/mowbot_link.sh"
-SUBSYSTEM=="tty", KERNEL=="ttyUSB*", ACTION=="remove",  RUN+="/bin/bash /usr/local/bin/mowbot_link.sh"
