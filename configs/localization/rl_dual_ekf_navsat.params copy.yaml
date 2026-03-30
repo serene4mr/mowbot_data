@@ -14,11 +14,11 @@ ekf_filter_node_odom:
     world_frame: odom
 
     odom0: odom
-    odom0_config: [true,  true,  false,   # x, y, z
-                   false, false, true,    # roll, pitch, yaw
-                   true,  true,  true,    # vx, vy, vz
-                   false, false, true,    # vroll, vpitch, vyaw
-                   false, false, false]   # ax, ay, az
+    odom0_config: [false, false, false,
+                  false, false, false,
+                  true,  true,  true,
+                  false, false, true,
+                  false, false, false]
     odom0_queue_size: 10
     odom0_differential: false
     odom0_relative: false
@@ -35,11 +35,11 @@ ekf_filter_node_odom:
     imu0_remove_gravitational_acceleration: true
 
     imu1: imu
-    imu1_config: [false, false, false,
-                  true,  true,  false,   # roll, pitch
-                  false, false, false,
-                  true,  true,  true,    # optionally all angular velocities
-                  false, false, false]
+    imu1_config: [false, false, false,  # x, y, z
+                  false,  false,  false, # roll, pitch, yaw
+                  false,   false, false,   # vx, vy, vz
+                  false,  false,  true,  # vroll, vpitch, vyaw
+                  false,  false,  false] # ax, ay, az
     imu1_differential: false  # If using a real robot you might want to set this to true, since usually absolute measurements from real imu's are not very accurate
     imu1_relative: false
     imu1_queue_size: 10
