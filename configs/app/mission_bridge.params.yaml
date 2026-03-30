@@ -38,7 +38,8 @@ mission_bridge_node:
     # ========================================================================
     # GPS and Heading Topics
     # ========================================================================
-    gps_topic: "/gnss/fix_filtered"      # NavSatFix topic for position
+    # gps_topic: "/gnss/fix_filtered"      # NavSatFix topic for position
+    gps_topic: "/gnss/fix"
     heading_topic: "/gnss/heading"        # Imu topic for orientation
     odom_topic: "/odometry/local"         # Odometry topic for velocity (vx, vy, omega)
     # Note: dual_gnss_compass publishes heading with heading_offset_rad: 1.5708
