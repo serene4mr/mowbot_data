@@ -51,8 +51,8 @@ mission_bridge_node:
     # Navigation Settings (Real Nav2)
     # ========================================================================
     nav_timeout: 120.0  # Navigation timeout in seconds (2 minutes for real navigation)
-    nav2_action_server: "navigate_through_poses"  # NavigateThroughPoses action server name
-    # nav2_action_server: "navigate_to_pose" 
+    # nav2_action_server: "navigate_through_poses"  # NavigateThroughPoses action server name
+    nav2_action_server: "navigate_to_pose" 
     # ========================================================================
     # State Publishing
     # ========================================================================
