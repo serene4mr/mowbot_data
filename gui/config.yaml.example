@@ -1,0 +1,48 @@
+# Teach-in missions (JSON) written under project root by default
+missions:
+  directory: "/etc/mowbot_data/missions"
+  max_start_distance_m: 50.0  # warn if robot is farther than this from 1st waypoint; 0 disables
+
+# Teach-in validation (POLY)
+# - poly_max_close_gap_m: first and last waypoint must be within this distance (m) to close the loop; <=0 disables
+# - poly_min_area_m2: reject polygons smaller than this (m²); <=0 disables
+# - poly_reject_self_intersection: reject save (and warn live) when boundary edges cross
+teach_in:
+  poly_max_close_gap_m: 5.0
+  poly_min_area_m2: 0.0
+  poly_reject_self_intersection: true
+
+# POLY → coverage path (boustrophedon sweep; preview + execute)
+coverage:
+  mow_width_m: 0.5
+  overlap_pct: 10.0
+  sweep_angle_deg: null  # null = align passes perpendicular to longest boundary edge
+  max_waypoints: 2000
+  min_turn_radius_m: 0.0  # 0 = sharp turns (legacy); e.g. 0.5 for 50cm radius arcs at stripe ends
+  stripe_point_spacing_m: 1.0  # 0 disables stripe densification; e.g. 0.75 for interior points every 75cm
+
+docker_containers:
+  bringup_and_sensing:
+    container_name:
+      - mowbot_uros_agent
+      - mowbot_bringup_and_sensing
+  localization:
+    container_name: mowbot_localization
+  navigation:
+    container_name: mowbot_navigation
+  app:
+    container_name: mowbot_app
+
+docker_startup_sequence:
+  - key: bringup_and_sensing
+    settle_time_s: 5
+  - key: localization
+    settle_time_s: 5
+  - key: navigation
+    settle_time_s: 3
+  - key: app
+    settle_time_s: 2
+
+# If true, stop all configured docker_containers keys before startup sequence.
+# This only affects containers listed in docker_containers (safe allowlist).
+docker_reset_on_startup: false
