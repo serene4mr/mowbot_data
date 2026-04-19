@@ -54,6 +54,7 @@ mission_bridge_node:
     nav2_action_server: "navigate_through_poses"  # NavigateThroughPoses action server name
     # nav2_action_server: "navigate_to_pose" 
     mission_start_delay: 2.0  # Delay in seconds after receiving mission before movement starts
+    start_node_tolerance: 1.0  # Meters: lead-in navigate if robot is farther than this from first order node
     # ========================================================================
     # State Publishing
     # ========================================================================
@@ -68,9 +69,10 @@ mission_bridge_node:
     # Diagnostics Settings
     # ========================================================================
     diagnostics_topic: "/diagnostics"
-    driving_mode_key: "driving_mode"
-    manual_mode_value: "1"
-    auto_mode_value: "0"
+    base_diagnostics_topic: "/mowbot_base/diagnostics"
+    driving_mode_key: "control_mode"
+    manual_mode_value: "MANUAL"
+    auto_mode_value: "AUTO"
     
     # ========================================================================
     # Order Processing
