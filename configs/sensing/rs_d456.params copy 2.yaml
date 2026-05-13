@@ -31,7 +31,7 @@ output: screen
 # enable color stream
 enable_color: true
 # color stream profile
-rgb_camera.color_profile: '640x480x30'
+rgb_camera.color_profile: '1280x720x30'
 # color stream format
 rgb_camera.color_format: RGB8
 # enable/disable auto exposure for color image
@@ -48,7 +48,7 @@ enable_infra1: false
 # enable infra2 stream
 enable_infra2: false
 # depth stream profile
-depth_module.depth_profile: '640x480x30'
+depth_module.depth_profile: '848x480x30'
 # depth stream format
 depth_module.depth_format: Z16
 # infra streams (0/1/2) profile
@@ -80,7 +80,7 @@ depth_module.exposure.2: 1
 # Depth module second gain value. Used for hdr_merge filter
 depth_module.gain.2: 16
 # enable sync mode
-enable_sync: true
+enable_sync: false
 # [0-Default, 1-Master, 2-Slave]
 depth_module.inter_cam_sync_mode: 0
 # enable rgbd topic
@@ -111,61 +111,34 @@ diagnostics_period: 0.0
 publish_tf: true
 # [double] rate in Hz for publishing dynamic TF
 tf_publish_rate: 0.0
-
 # (rs_launch description empty)
-pointcloud__neon_.enable: true
-# texture stream for pointcloud__neon_
-pointcloud__neon_.stream_filter: 2
-# texture stream index for pointcloud__neon_
-pointcloud__neon_.stream_index_filter: 0
+pointcloud.enable: false
+# texture stream for pointcloud
+pointcloud.stream_filter: 2
+# texture stream index for pointcloud
+pointcloud.stream_index_filter: 0
 # (rs_launch description empty)
-pointcloud__neon_.ordered_pc: true
+pointcloud.ordered_pc: false
 # (rs_launch description empty)
-pointcloud__neon_.allow_no_texture_points: false
+pointcloud.allow_no_texture_points: false
 # enable align depth filter
 align_depth.enable: true
 # enable colorizer filter
 colorizer.enable: false
-
 # enable_decimation_filter
-decimation_filter.enable: false
-# decimation filter magnitude
-decimation_filter.filter_magnitude: 2
-decimation_filter.frames_queue_size: 16
-decimation_filter.stream_filter: 0
-decimation_filter.stream_format_filter: 0
-decimation_filter.stream_index_filter: -1
-
-# enable_spatial_filter
-spatial_filter.enable: false
-spatial_filter.filter_magnitude: 2
-spatial_filter.filter_smooth_alpha: 0.5
-spatial_filter.filter_smooth_delta: 20
-spatial_filter.frames_queue_size: 16
-spatial_filter.holes_fill: 0
-spatial_filter.stream_filter: 1
-spatial_filter.stream_format_filter: 1
-spatial_filter.stream_index_filter: -1
-
-# enable_temporal_filter
-temporal_filter.enable: true
-temporal_filter.filter_smooth_alpha: 0.4
-temporal_filter.filter_smooth_delta: 20
-temporal_filter.frames_queue_size: 16
-temporal_filter.holes_fill: 3
-temporal_filter.stream_filter: 1
-temporal_filter.stream_format_filter: 1
-temporal_filter.stream_index_filter: -1
-
-# enable_hole_filling_filter
-hole_filling_filter.enable: false
-
+decimation_filter.enable: true
 # enable rotation_filter
 rotation_filter.enable: false
 # rotation value: 0.0, 90.0, -90.0, 180.0
 rotation_filter.rotation: 0.0
+# enable_spatial_filter
+spatial_filter.enable: true
+# enable_temporal_filter
+temporal_filter.enable: true
 # enable_disparity_filter — if true, pipeline can emit DISPARITY32; this node does not support that format (drops frames / ERROR).
 disparity_filter.enable: false
+# enable_hole_filling_filter
+hole_filling_filter.enable: true
 # hdr_merge filter enablement flag
 hdr_merge.enable: false
 # Timeout for waiting for device to connect (Seconds)
@@ -176,13 +149,15 @@ reconnect_timeout: 6.0
 base_frame_id: link
 # prefix to be prepended to all frame IDs
 tf_prefix: ''
+# decimation filter magnitude
+decimation_filter.filter_magnitude: 2
 # enable safety stream
 enable_safety: false
 # [int] 0-Run, 1-Standby, 2-Service
 safety_camera.safety_mode: 0
 # enable labeled point cloud stream
 enable_labeled_point_cloud: false
-# Label pointcloud__neon_ stream profile
+# Label PointCloud stream profile
 depth_mapping_camera.labeled_point_cloud_profile: '0,0,0'
 # enable occupancy stream
 enable_occupancy: false
