@@ -128,7 +128,7 @@ align_depth.enable: true
 colorizer.enable: false
 
 # enable_decimation_filter
-decimation_filter.enable: false
+decimation_filter.enable: true
 # decimation filter magnitude
 decimation_filter.filter_magnitude: 2
 decimation_filter.frames_queue_size: 16

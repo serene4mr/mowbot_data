@@ -80,6 +80,7 @@ controller_server:
       min_lookahead_dist: 0.4
       max_lookahead_dist: 1.2
       lookahead_time: 1.5
+      rotate_to_heading_angular_vel: 1.8
       transform_tolerance: 0.1
       use_velocity_scaled_lookahead_dist: false
       min_approach_linear_velocity: 0.05
@@ -90,8 +91,7 @@ controller_server:
       use_cost_regulated_linear_velocity_scaling: false
       regulated_linear_scaling_min_radius: 0.9
       regulated_linear_scaling_min_speed: 0.25
-      use_rotate_to_heading: true
-      rotate_to_heading_angular_vel: 1.0
+      use_rotate_to_heading: false
       rotate_to_heading_min_angle: 0.785
       max_angular_accel: 3.2
       max_robot_pose_search_dist: 10.0
@@ -105,16 +105,14 @@ local_costmap:
   local_costmap:
     ros__parameters:
       use_sim_time: False
-      update_frequency: 5.0 #10.0
-      publish_frequency: 5.0 #10.0
+      update_frequency: 5.0
+      publish_frequency: 2.0
       global_frame: odom
       robot_base_frame: base_footprint
       rolling_window: true
       width: 6
       height: 6
-      resolution: 0.1
-      always_send_full_costmap: True 
-      track_unknown_space: True
+      resolution: 0.05
       # footprint: "[ [-0.75, 0.75], [0.75, 0.75], [0.75, -0.75], [-0.75, -0.75] ]"  
       footprint: "[ [-0.6915, 0.699], [0.6915, 0.699], [0.6915, -0.699], [-0.6915, -0.699] ]"  
       # footprint: "[ [-0.6, 0.6], [0.6, 0.6], [0.6, -0.6], [-0.6, -0.6] ]"  
@@ -141,7 +139,7 @@ local_costmap:
       #   inflation_radius: 0.55
 
       # always_send_full_costmap: True
-      plugins: [  "inflation_layer"] #"obstacle_layer", "semantic_segmentation_layer",
+      plugins: [ "semantic_segmentation_layer", "inflation_layer"] #"obstacle_layer",
 
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -175,77 +173,24 @@ local_costmap:
           sync_slop: 0.05
           max_obstacle_distance: 5.0
           min_obstacle_distance: 0.3
-          tile_map_decay_time: 3.0 #2.0
+          tile_map_decay_time: 2.0
+          class_types: ["traversable", "danger"]
 
-          class_types: ["cuttable", "traversable", "non-traversable"]
-
-          cuttable:
-            classes: ["cuttable"]
-            base_cost: 254
+          traversable:
+            classes: ["traversable", "cuttable"]
+            base_cost: 0
             max_cost: 0
-            mark_confidence: 128
+            mark_confidence: 0
             samples_to_max_cost: 0
             dominant_priority: false
 
-          traversable:
-            classes: ["traversable"]
-            base_cost: 254          # Base penalty for driving here
-            max_cost: 50           # Max penalty
-            mark_confidence: 128   # Add some confidence filtering
-            samples_to_max_cost: 2
-            dominant_priority: false
-
-          non-traversable:
+          danger:
             classes: ["non-traversable"]
-            base_cost: 0           # Ignore it (treat as free) until we are sure
-            max_cost: 254          # LETHAL once confirmed
-            mark_confidence: 180   # Must be > 70% confident
-            samples_to_max_cost: 3 # Must see it for 3 frames to confirm
+            base_cost: 254
+            max_cost: 254
+            mark_confidence: 0
+            samples_to_max_cost: 0
             dominant_priority: true
-            
-          # class_types: ["cuttable", "traversable", "non-traversable"]
-
-          # cuttable:
-          #   classes: ["cuttable"]
-          #   base_cost: 0 #254
-          #   max_cost: 0
-          #   mark_confidence: 128
-          #   samples_to_max_cost: 0
-          #   dominant_priority: false
-
-          # traversable:
-          #   classes: ["traversable"]
-          #   base_cost: 10          # Base penalty for driving here
-          #   max_cost: 50           # Max penalty
-          #   mark_confidence: 128   # Add some confidence filtering
-          #   samples_to_max_cost: 2
-          #   dominant_priority: false
-
-          # non-traversable:
-          #   classes: ["non-traversable"]
-          #   base_cost: 0           # Ignore it (treat as free) until we are sure
-          #   max_cost: 254          # LETHAL once confirmed
-          #   mark_confidence: 128   # Must be > 70% confident
-          #   samples_to_max_cost: 3 # Must see it for 3 frames to confirm
-          #   dominant_priority: true
-
-          # class_types: ["traversable", "danger"]
-
-          # traversable:
-          #   classes: ["traversable", "cuttable"]
-          #   base_cost: 0
-          #   max_cost: 0
-          #   mark_confidence: 0
-          #   samples_to_max_cost: 0
-          #   dominant_priority: false
-
-          # danger:
-          #   classes: ["non-traversable"]
-          #   base_cost: 254
-          #   max_cost: 254
-          #   mark_confidence: 0
-          #   samples_to_max_cost: 0
-          #   dominant_priority: false
 
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
@@ -260,13 +205,12 @@ global_costmap:
       update_frequency: 1.0
       publish_frequency: 1.0
       global_frame: map
-      always_send_full_costmap: True 
-      track_unknown_space: True
       robot_base_frame: base_footprint
       footprint: "[ [-0.6915, 0.699], [0.6915, 0.699], [0.6915, -0.699], [-0.6915, -0.699] ]"  
       rolling_window: True                 
       width: 50                            
       height: 50                           
+      track_unknown_space: true
       # plugins: ["obstacle_layer", "inflation_layer"]
       
       # obstacle_layer:
@@ -317,39 +261,13 @@ global_costmap:
           pointcloud_topic: "/camera/camera/depth/color/points" #"/segmentation/points" #"/rgbd_camera/depth/points"
           observation_persistence: 0.0
           expected_update_rate: 0.0
-          visualize_tile_map: true
-          use_cost_selection: true
+          visualize_tile_map: false
+          use_cost_selection: false
           # Optional per-source max stamp skew for ApproximateTime (sec). Omit or use -1 for layer default.
           sync_slop: 0.05
           max_obstacle_distance: 5.0
           min_obstacle_distance: 0.3
-          tile_map_decay_time: 1.0 #2.0
-          # class_types: ["cuttable", "traversable", "non-traversable"]
-
-          # cuttable:
-          #   classes: ["cuttable"]
-          #   base_cost: 254
-          #   max_cost: 0
-          #   mark_confidence: 128
-          #   samples_to_max_cost: 0
-          #   dominant_priority: false
-
-          # traversable:
-          #   classes: ["traversable"]
-          #   base_cost: 254          # Base penalty for driving here
-          #   max_cost: 50           # Max penalty
-          #   mark_confidence: 128   # Add some confidence filtering
-          #   samples_to_max_cost: 2
-          #   dominant_priority: false
-
-          # non-traversable:
-          #   classes: ["non-traversable"]
-          #   base_cost: 0           # Ignore it (treat as free) until we are sure
-          #   max_cost: 254          # LETHAL once confirmed
-          #   mark_confidence: 180   # Must be > 70% confident
-          #   samples_to_max_cost: 3 # Must see it for 3 frames to confirm
-          #   dominant_priority: true
-
+          tile_map_decay_time: 2.0
           class_types: ["traversable", "danger"]
 
           traversable:
@@ -365,9 +283,8 @@ global_costmap:
             base_cost: 254
             max_cost: 254
             mark_confidence: 0
-            samples_to_max_cost: 0
+            samples_to_max_cost: 5
             dominant_priority: false
-
 
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
@@ -456,8 +373,8 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.6, 0.0, 1.0]
-    min_velocity: [-0.6, 0.0, -1.0]
+    max_velocity: [0.6, 0.0, 1.8]
+    min_velocity: [-0.6, 0.0, -1.8]
     max_accel: [2.5, 0.0, 3.2]
     max_decel: [-2.5, 0.0, -3.2]
     odom_topic: "odometry/local" # only works if in CLOSED_LOOP
