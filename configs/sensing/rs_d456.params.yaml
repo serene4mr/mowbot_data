@@ -1,44 +1,44 @@
-# Intel RealSense — parameters from realsense2_camera `rs_launch.py` configurable_parameters (lines 23–101).
-# Comments mirror each parameter’s `description` field there (empty upstream descriptions noted).
-# Load via: config_file:=<path>
+# Intel RealSense D456 — parameters synced from live /camera/camera node.
+# Source: ros2 param dump /camera/camera (155 node parameters).
+# Load via: config_file:=<path> (realsense2_camera rs_launch.py)
 #
-# Not listed here (launch-only / meta): config_file
+# Excludes ROS-internal: use_sim_time, qos_overrides, image_transport/foxglove plugins.
+# Launch-only (rs_launch.py, not declared on node): camera_namespace, log_level, output,
+#   config_file, accelerate_gpu_with_glsl, rosbag_loop, enable_gyro/accel/motion,
+#   gyro/accel/motion_fps, enable_safety, safety_camera.safety_mode,
+#   enable_labeled_point_cloud, depth_mapping_camera.*, enable_occupancy,
+#   depth_module.color_profile/format (D405), depth_module.exposure.1/.2, gain.1/.2,
+#   rgb_camera.power_line_frequency is on node; pointcloud.* in rs_launch maps to pointcloud__neon_.*
 
+# --- Connection / device ---
 # camera unique name
 camera_name: rgbd_camera
-# namespace for camera
-camera_namespace: rgbd_camera
-# choose device by serial number
 serial_no: ''
-# choose device by usb port id
 usb_port_id: ''
-# choose device by type
 device_type: ''
-# allows advanced configuration
 json_file_path: ''
-# (rs_launch description empty)
 initial_reset: false
-# enable GPU acceleration with GLSL
-accelerate_gpu_with_glsl: false
-# A realsense bagfile to run from as a device
 rosbag_filename: ''
-# Enable loop playback when playing a bagfile
-rosbag_loop: false
-# debug log level [DEBUG|INFO|WARN|ERROR|FATAL]
-log_level: info
-# pipe node output [screen|log]
-output: screen
+# Timeout for waiting for device to connect (Seconds)
+wait_for_device_timeout: -1.0
+# Timeout(seconds) between consequtive reconnection attempts
+reconnect_timeout: 6.0
+
+# --- TF / diagnostics ---
+# Root frame of the sensors transform tree
+base_frame_id: link
+# prefix to be prepended to all frame IDs
+tf_prefix: ''
+# [bool] enable/disable publishing static & dynamic TF
+publish_tf: true
+# [double] rate in Hz for publishing dynamic TF
+tf_publish_rate: 0.0
+# Rate of publishing diagnostics. 0=Disabled
+diagnostics_period: 0.0
+
+# --- Streams enable ---
 # enable color stream
 enable_color: true
-# color stream profile
-rgb_camera.color_profile: '640x480x30'
-# color stream format
-rgb_camera.color_format: RGB8
-# enable/disable auto exposure for color image
-rgb_camera.enable_auto_exposure: true
-# Anti-flicker for AC lighting. ROS allows only 0–2 (device may report 3 → WARN without this).
-# Typical: 0=disabled, 1=50 Hz, 2=60 Hz (pick for your mains frequency).
-rgb_camera.power_line_frequency: 2
 # enable depth stream
 enable_depth: true
 # enable infra0 stream
@@ -47,86 +47,125 @@ enable_infra: false
 enable_infra1: false
 # enable infra2 stream
 enable_infra2: false
-# depth stream profile
-depth_module.depth_profile: '640x480x30'
+enable_sync: true
+enable_rgbd: false
+hold_back_imu_for_frames: false
+unite_imu_method: 0
+clip_distance: -2.0
+angular_velocity_cov: 0.01
+linear_accel_cov: 0.01
+
+# --- QoS ---
+color_qos: SYSTEM_DEFAULT
+color_info_qos: DEFAULT
+depth_qos: SYSTEM_DEFAULT
+depth_info_qos: DEFAULT
+infra_qos: SYSTEM_DEFAULT
+infra_info_qos: DEFAULT
+infra1_qos: SYSTEM_DEFAULT
+infra1_info_qos: DEFAULT
+infra2_qos: SYSTEM_DEFAULT
+infra2_info_qos: DEFAULT
+
+# --- RGB camera ---
+rgb_camera.auto_exposure_priority: false
+rgb_camera.auto_exposure_roi.bottom: 479
+rgb_camera.auto_exposure_roi.left: 0
+rgb_camera.auto_exposure_roi.right: 639
+rgb_camera.auto_exposure_roi.top: 0
+rgb_camera.backlight_compensation: false
+rgb_camera.brightness: 0
+# color stream format
+rgb_camera.color_format: RGB8
+# color stream profile
+rgb_camera.color_profile: '640x480x30'
+rgb_camera.contrast: 50
+# enable/disable auto exposure for color image
+rgb_camera.enable_auto_exposure: true
+rgb_camera.enable_auto_white_balance: true
+rgb_camera.exposure: 166
+rgb_camera.frames_queue_size: 16
+rgb_camera.gain: 64
+rgb_camera.gamma: 300
+rgb_camera.global_time_enabled: true
+rgb_camera.hue: 0
+rgb_camera.power_line_frequency: 2
+rgb_camera.saturation: 64
+rgb_camera.sharpness: 50
+rgb_camera.white_balance: 4600.0
+
+# --- Depth module ---
+depth_module.auto_exposure_limit: 200000
+depth_module.auto_exposure_limit_toggle: false
+depth_module.auto_exposure_mode: false
+depth_module.auto_exposure_roi.bottom: 479
+depth_module.auto_exposure_roi.left: 0
+depth_module.auto_exposure_roi.right: 639
+depth_module.auto_exposure_roi.top: 0
+depth_module.auto_gain_limit: 248
+depth_module.auto_gain_limit_toggle: false
 # depth stream format
 depth_module.depth_format: Z16
-# infra streams (0/1/2) profile
-depth_module.infra_profile: '0,0,0'
-# infra0 stream format
-depth_module.infra_format: RGB8
+# depth stream profile
+depth_module.depth_profile: '640x480x30'
+depth_module.emitter_always_on: false
+depth_module.emitter_enabled: 1
+depth_module.emitter_frequency: false
+depth_module.emitter_on_off: false
+# enable/disable auto exposure for depth image
+depth_module.enable_auto_exposure: true
+depth_module.error_polling_enabled: true
+# Depth module manual exposure value
+depth_module.exposure: 8500
+depth_module.frames_queue_size: 16
+# Depth module manual gain value
+depth_module.gain: 16
+depth_module.global_time_enabled: true
+# Depth module hdr enablement flag. Used for hdr_merge filter
+depth_module.hdr_enabled: false
 # infra1 stream format
 depth_module.infra1_format: Y8
 # infra2 stream format
 depth_module.infra2_format: Y8
-# Depth module color stream profile for d405
-depth_module.color_profile: '0,0,0'
-# color stream format for d405
-depth_module.color_format: RGB8
-# Depth module manual exposure value
-depth_module.exposure: 8500
-# Depth module manual gain value
-depth_module.gain: 16
-# Depth module hdr enablement flag. Used for hdr_merge filter
-depth_module.hdr_enabled: false
-# enable/disable auto exposure for depth image
-depth_module.enable_auto_exposure: true
-# Depth module first exposure value. Used for hdr_merge filter
-depth_module.exposure.1: 7500
-# Depth module first gain value. Used for hdr_merge filter
-depth_module.gain.1: 16
-# Depth module second exposure value. Used for hdr_merge filter
-depth_module.exposure.2: 1
-# Depth module second gain value. Used for hdr_merge filter
-depth_module.gain.2: 16
-# enable sync mode
-enable_sync: true
-# [0-Default, 1-Master, 2-Slave]
+# infra0 stream format
+depth_module.infra_format: RGB8
+# infra streams (0/1/2) profile
+depth_module.infra_profile: '640x480x30'
 depth_module.inter_cam_sync_mode: 0
-# enable rgbd topic
-enable_rgbd: false
-# enable gyro stream
-enable_gyro: false
-# enable accel stream
-enable_accel: false
-# enable motion stream (IMU) for DDS devices
-enable_motion: false
-# (rs_launch description empty)
-gyro_fps: 0
-# (rs_launch description empty)
-accel_fps: 0
-# motion stream samples per second
-motion_fps: 0
-# [0-None, 1-copy, 2-linear_interpolation]
-unite_imu_method: 0
-# (rs_launch description empty)
-clip_distance: -2.0
-# (rs_launch description empty)
-angular_velocity_cov: 0.01
-# (rs_launch description empty)
-linear_accel_cov: 0.01
-# Rate of publishing diagnostics. 0=Disabled
-diagnostics_period: 0.0
-# [bool] enable/disable publishing static & dynamic TF
-publish_tf: true
-# [double] rate in Hz for publishing dynamic TF
-tf_publish_rate: 0.0
+depth_module.laser_power: 150.0
+depth_module.output_trigger_enabled: false
+depth_module.sequence_id: 0
+depth_module.sequence_name: 0
+depth_module.sequence_size: 2
+depth_module.thermal_compensation: true
+depth_module.visual_preset: 0
 
-# (rs_launch description empty)
-pointcloud__neon_.enable: true
-# texture stream for pointcloud__neon_
-pointcloud__neon_.stream_filter: 2
-# texture stream index for pointcloud__neon_
-pointcloud__neon_.stream_index_filter: 0
-# (rs_launch description empty)
-pointcloud__neon_.ordered_pc: true
-# (rs_launch description empty)
+# --- Pointcloud (NEON) ---
 pointcloud__neon_.allow_no_texture_points: false
+pointcloud__neon_.enable: true
+pointcloud__neon_.filter_magnitude: 2
+pointcloud__neon_.frames_queue_size: 16
+pointcloud__neon_.ordered_pc: true
+pointcloud__neon_.pointcloud_qos: DEFAULT
+pointcloud__neon_.stream_filter: 2
+pointcloud__neon_.stream_format_filter: 0
+pointcloud__neon_.stream_index_filter: 0
+
+# --- Filters ---
 # enable align depth filter
 align_depth.enable: true
+align_depth.frames_queue_size: 16
+colorizer.color_scheme: 0
 # enable colorizer filter
 colorizer.enable: false
-
+colorizer.frames_queue_size: 16
+colorizer.histogram_equalization_enabled: true
+colorizer.max_distance: 6.0
+colorizer.min_distance: 0.0
+colorizer.stream_filter: 1
+colorizer.stream_format_filter: 1
+colorizer.stream_index_filter: -1
+colorizer.visual_preset: 0
 # enable_decimation_filter
 decimation_filter.enable: true
 # decimation filter magnitude
@@ -135,9 +174,32 @@ decimation_filter.frames_queue_size: 16
 decimation_filter.stream_filter: 0
 decimation_filter.stream_format_filter: 0
 decimation_filter.stream_index_filter: -1
-
+# enable_disparity_filter
+disparity_filter.enable: false
+disparity_to_depth.enable: false
+filter_by_sequence_id.enable: false
+filter_by_sequence_id.frames_queue_size: 16
+filter_by_sequence_id.sequence_id: 1
+# hdr_merge filter enablement flag
+hdr_merge.enable: false
+hdr_merge.frames_queue_size: 16
+# enable_hole_filling_filter
+hole_filling_filter.enable: false
+hole_filling_filter.frames_queue_size: 16
+hole_filling_filter.holes_fill: 1
+hole_filling_filter.stream_filter: 1
+hole_filling_filter.stream_format_filter: 1
+hole_filling_filter.stream_index_filter: -1
+# enable rotation_filter
+rotation_filter.enable: false
+rotation_filter.frames_queue_size: 16
+# rotation value: 0.0, 90.0, -90.0, 180.0
+rotation_filter.rotation: 0.0
+rotation_filter.stream_filter: 0
+rotation_filter.stream_format_filter: 0
+rotation_filter.stream_index_filter: -1
 # enable_spatial_filter
-spatial_filter.enable: false
+spatial_filter.enable: true
 spatial_filter.filter_magnitude: 2
 spatial_filter.filter_smooth_alpha: 0.5
 spatial_filter.filter_smooth_delta: 20
@@ -146,7 +208,6 @@ spatial_filter.holes_fill: 0
 spatial_filter.stream_filter: 1
 spatial_filter.stream_format_filter: 1
 spatial_filter.stream_index_filter: -1
-
 # enable_temporal_filter
 temporal_filter.enable: true
 temporal_filter.filter_smooth_alpha: 0.4
@@ -156,35 +217,3 @@ temporal_filter.holes_fill: 3
 temporal_filter.stream_filter: 1
 temporal_filter.stream_format_filter: 1
 temporal_filter.stream_index_filter: -1
-
-# enable_hole_filling_filter
-hole_filling_filter.enable: false
-
-# enable rotation_filter
-rotation_filter.enable: false
-# rotation value: 0.0, 90.0, -90.0, 180.0
-rotation_filter.rotation: 0.0
-# enable_disparity_filter — if true, pipeline can emit DISPARITY32; this node does not support that format (drops frames / ERROR).
-disparity_filter.enable: false
-# hdr_merge filter enablement flag
-hdr_merge.enable: false
-# Timeout for waiting for device to connect (Seconds)
-wait_for_device_timeout: -1.0
-# Timeout(seconds) between consequtive reconnection attempts
-reconnect_timeout: 6.0
-# Root frame of the sensors transform tree
-base_frame_id: link
-# prefix to be prepended to all frame IDs
-tf_prefix: ''
-# enable safety stream
-enable_safety: false
-# [int] 0-Run, 1-Standby, 2-Service
-safety_camera.safety_mode: 0
-# enable labeled point cloud stream
-enable_labeled_point_cloud: false
-# Label pointcloud__neon_ stream profile
-depth_mapping_camera.labeled_point_cloud_profile: '0,0,0'
-# enable occupancy stream
-enable_occupancy: false
-# Occupancy stream profile
-depth_mapping_camera.occupancy_profile: '0,0,0'

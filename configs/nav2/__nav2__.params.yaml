@@ -19,8 +19,7 @@ bt_navigator:
       plugin: "nav2_bt_navigator::NavigateToPoseNavigator"
     navigate_through_poses:
       plugin: "nav2_bt_navigator::NavigateThroughPosesNavigator"
-    # Custom BTs with Spin recovery removed (mower should never rotate in place).
-    # Paths are injected at launch via RewrittenYaml param_rewrites from data_path.
+
     default_nav_to_pose_bt_xml: "__BT_NAV_TO_POSE__"
     default_nav_through_poses_bt_xml: "__BT_NAV_THROUGH_POSES__"
 
@@ -80,7 +79,7 @@ controller_server:
       min_lookahead_dist: 0.3
       max_lookahead_dist: 0.9
       lookahead_time: 1.5
-      rotate_to_heading_angular_vel: 1.8
+      
       transform_tolerance: 0.1
       use_velocity_scaled_lookahead_dist: false
       min_approach_linear_velocity: 0.05
@@ -91,8 +90,11 @@ controller_server:
       use_cost_regulated_linear_velocity_scaling: false
       regulated_linear_scaling_min_radius: 0.9
       regulated_linear_scaling_min_speed: 0.25
+
       use_rotate_to_heading: false
       rotate_to_heading_min_angle: 0.785
+      rotate_to_heading_angular_vel: 1.8
+
       max_angular_accel: 3.2
       max_robot_pose_search_dist: 10.0
       use_interpolation: false
@@ -241,16 +243,16 @@ robot_state_publisher:
   ros__parameters:
     use_sim_time: False
 
-waypoint_follower:
-  ros__parameters:
-    use_sim_time: False
-    loop_rate: 20
-    stop_on_failure: false
-    waypoint_task_executor_plugin: "wait_at_waypoint"
-    wait_at_waypoint:
-      plugin: "nav2_waypoint_follower::WaitAtWaypoint"
-      enabled: True
-      waypoint_pause_duration: 1
+# waypoint_follower:
+#   ros__parameters:
+#     use_sim_time: False
+#     loop_rate: 20
+#     stop_on_failure: false
+#     waypoint_task_executor_plugin: "wait_at_waypoint"
+#     wait_at_waypoint:
+#       plugin: "nav2_waypoint_follower::WaitAtWaypoint"
+#       enabled: True
+#       waypoint_pause_duration: 1
 
 velocity_smoother:
   ros__parameters: # TODO: tune these values
