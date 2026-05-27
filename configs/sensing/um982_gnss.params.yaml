@@ -11,7 +11,7 @@
       heading_offset_deg: -90.0
       heading_length_m: 0.725
       heading_system: 'enu'
-      frame_id: 'gps'
+      frame_id: gnss_left_link
 
       publish:
         nmea: true
