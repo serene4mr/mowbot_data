@@ -1,0 +1,21 @@
+/**:
+  um982_node:
+    ros__parameters:
+    
+      port:
+        gnss: /dev/MB-UM982
+        gnss_baudrate: 115200
+        rtcm: /dev/MB-UM982-RTCM
+        rtcm_baudrate: 115200
+
+      frame_id: gnss_left_link
+      
+      # horizontal setup
+      heading_offset: 1.57
+
+      heading_system: 'enu'
+      
+      publish:
+        nmea: true
+
+      verbose: false

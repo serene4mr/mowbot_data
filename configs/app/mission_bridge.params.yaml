@@ -42,8 +42,9 @@ mission_bridge_node:
     # ========================================================================
     gps_topic: "/gnss/fix_filtered"      # NavSatFix topic for position
     # gps_topic: "/gnss/fix"
-    heading_topic: "/gnss/heading"        # Imu topic for orientation
+    heading_topic: "/gnss/heading"        # Raw GNSS compass Imu (auxiliary info + theta fallback)
     odom_topic: "/odometry/local"         # Odometry topic for velocity (vx, vy, omega)
+    base_frame: "base_footprint"         # TF frame for VDA5050 agvPosition.theta
     # Note: dual_gnss_compass publishes heading with heading_offset_rad: 1.5708
     #       which converts from ENU to compass/NED convention
     
@@ -58,7 +59,7 @@ mission_bridge_node:
     # ========================================================================
     # State Publishing
     # ========================================================================
-    state_publish_rate: 1.0  # Hz (1 = publish state every 1 second)
+    state_publish_rate: 2.0  # Hz (1 = publish state every 1 second)
     
     # ========================================================================
     # Message Validation
