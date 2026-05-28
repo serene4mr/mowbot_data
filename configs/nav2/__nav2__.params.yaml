@@ -147,8 +147,8 @@ global_costmap:
       robot_base_frame: base_footprint
       footprint: "[ [-0.6915, 0.699], [0.6915, 0.699], [0.6915, -0.699], [-0.6915, -0.699] ]"   
       resolution: 0.1            
-      width: 30                      
-      height: 30
+      width: 10                     
+      height: 10
       origin_x: 0.0
       origin_y: 0.0
       rolling_window: True
