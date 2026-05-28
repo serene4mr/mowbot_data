@@ -89,9 +89,9 @@ mission_bridge_node:
     costmap_resize:
       enabled: true
       target_node: "/global_costmap/global_costmap"
-      margin_m: 5.0              # padding around mission bbox (m)
+      margin_m: 9.0              # padding around mission bbox (m)
       min_size_m: 20.0           # minimum width/height (m)
-      max_size_m: 500.0          # max width/height; above this falls back to rolling
+      max_size_m: 1000.0          # max width/height; above this falls back to rolling
       param_timeout_s: 10.0
       init_timeout_s: 30.0       # retry window for costmap snapshot at startup
       init_retry_period_s: 1.0   # seconds between snapshot retries
@@ -104,10 +104,10 @@ mission_bridge_node:
     # costmap_resize.enabled) gets its own dynamic costmap fit.
     # Lead-in navigation runs once before segment 0 only.
     # Continuous-mode only; ignored when nav2_action_server is navigate_to_pose.
-    # Disable by setting enabled=false (or max_waypoints_per_segment=0).
+    # Disable by setting enabled=false (or max_segment_length_m=0).
     path_segmentation:
       enabled: true
-      max_waypoints_per_segment: 10        # 0 = no limit
+      max_segment_length_m: 10.0           # cumulative path length per segment (m); 0 = no limit
       overlap_waypoints: 1                  # last wp of segment K == first of K+1
       clear_costmap_between_segments: true
 
