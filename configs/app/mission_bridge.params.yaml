@@ -42,8 +42,9 @@ mission_bridge_node:
     # ========================================================================
     gps_topic: "/gnss/fix_filtered"      # NavSatFix topic for position
     # gps_topic: "/gnss/fix"
-    heading_topic: "/gnss/heading"        # Imu topic for orientation
+    heading_topic: "/gnss/heading"        # Raw GNSS compass Imu (auxiliary info + theta fallback)
     odom_topic: "/odometry/local"         # Odometry topic for velocity (vx, vy, omega)
+    base_frame: "base_footprint"         # TF frame for VDA5050 agvPosition.theta
     # Note: dual_gnss_compass publishes heading with heading_offset_rad: 1.5708
     #       which converts from ENU to compass/NED convention
     
@@ -58,7 +59,7 @@ mission_bridge_node:
     # ========================================================================
     # State Publishing
     # ========================================================================
-    state_publish_rate: 1.0  # Hz (1 = publish state every 1 second)
+    state_publish_rate: 2.0  # Hz (1 = publish state every 1 second)
     
     # ========================================================================
     # Message Validation
@@ -78,4 +79,35 @@ mission_bridge_node:
     # Order Processing
     # ========================================================================
     accept_orders_when_busy: false  # Reject new orders while executing existing order
+
+    # ========================================================================
+    # Dynamic Global Costmap Resize (Optional)
+    # ========================================================================
+    # When enabled, the bridge resizes /global_costmap/global_costmap to fit
+    # each mission's bounding box (rolling_window=false). Lead-in navigation
+    # still uses the default rolling costmap. Defaults restored on mission end.
+    costmap_resize:
+      enabled: true
+      target_node: "/global_costmap/global_costmap"
+      margin_m: 9.0              # padding around mission bbox (m)
+      min_size_m: 20.0           # minimum width/height (m)
+      max_size_m: 1000.0          # max width/height; above this falls back to rolling
+      param_timeout_s: 10.0
+      init_timeout_s: 30.0       # retry window for costmap snapshot at startup
+      init_retry_period_s: 1.0   # seconds between snapshot retries
+
+    # ========================================================================
+    # Path Segmentation (Optional)
+    # ========================================================================
+    # Split mission paths into smaller segments executed sequentially.
+    # Each segment runs as one NavigateThroughPoses goal and (if
+    # costmap_resize.enabled) gets its own dynamic costmap fit.
+    # Lead-in navigation runs once before segment 0 only.
+    # Continuous-mode only; ignored when nav2_action_server is navigate_to_pose.
+    # Disable by setting enabled=false (or max_segment_length_m=0).
+    path_segmentation:
+      enabled: true
+      max_segment_length_m: 10.0           # cumulative path length per segment (m); 0 = no limit
+      overlap_waypoints: 1                  # last wp of segment K == first of K+1
+      clear_costmap_between_segments: true
 

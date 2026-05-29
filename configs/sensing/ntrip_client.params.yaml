@@ -1,25 +1,31 @@
 /**:
-  ntrip_client:
+  ntrip_client_node:
     ros__parameters:
-
-      host: ntrip.hi-rtk.io
-      port: 2101
-      mountpoint: SNS_AUTO
-      username: sns7
-      password: "1234"
-
-      ntrip_version: 'NTRIP/2.0'
-      ntrip_server_hz: 1.0
-      authenticate: True
-
-      ssl: false
-      cert: None
-      key: None
-      ca_cert: None
-      rtcm_frame_id: 'rtcm'
-      nmea_max_length: 500
-      nmea_min_length: 3
-      rtcm_message_package: 'rtcm_msgs'
-      reconnect_attempt_max: 10
-      reconnect_attempt_wait_seconds: 5
-      rtcm_timeout_seconds: 10
+      server:
+        host: ntrip.hi-rtk.io
+        port: 2101
+        mountpoint: SNS_AUTO
+        ntrip_version: 'NTRIP/2.0'
+      auth:
+        enable: True
+        username: sns7
+        password: "1234"
+      ssl:
+        enable: false
+        cert: ""
+        key: ""
+        ca_cert: ""
+      nmea:
+        send_min_interval_seconds: 1.0
+        min_length: 3
+        max_length: 200
+      reconnect:
+        initial_seconds: 1.0
+        max_seconds: 30.0
+        rtcm_timeout_seconds: 4.0
+      rtcm:
+        frame_id: gnss
+        qos_depth: 50
+      diagnostics:
+        rate: 1.0
+      verbose: false
