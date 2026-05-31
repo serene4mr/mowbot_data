@@ -8,8 +8,8 @@
         ntrip_version: 'NTRIP/2.0'
       auth:
         enable: True
-        username: sns7
-        password: "1234"
+        username: ""
+        password: ""
       ssl:
         enable: false
         cert: ""
