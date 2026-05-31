@@ -1,11 +1,3 @@
-# GPS WPF CHANGES:
-# - amcl params where removed. They are not needed because global localization is provided
-#   by an ekf node on robot_localization fusing gps data with local odometry sources
-# - static layer is removed from both costmaps, in this tutorial we assume there is no map
-#   of the environment
-# - global costmap is set to be rolling to allow the robot to traverse big environment by
-#   following successive relatively close waypoints that fit in a smaller rolling costmap
-
 bt_navigator:
   ros__parameters:
     global_frame: map
@@ -294,8 +286,8 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.3, 0.0, 1.0]
-    min_velocity: [-0.3, 0.0, -1.0]
+    max_velocity: [1.0, 0.0, 1.0]
+    min_velocity: [-1.0, 0.0, -1.0]
     max_accel: [2.0, 0.0, 2.5]
     max_decel: [-2.0, 0.0, -2.5]
     odom_topic: "odometry/local" # only works if in CLOSED_LOOP
