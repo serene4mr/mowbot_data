@@ -1,8 +1,8 @@
 # General Application Settings
 # MQTT state topic shape: uagv/v2/<manufacturer>/<serial>/state  e.g. uagv/v2/MowbotTech/mowbot_001/state
 general:
-  manufacturer: "MowbotTech"      # Default manufacturer for VDA5050 topics
-  serial_number: "mowbot_001"  # Robot AGV serial (must match VDA 5050 state topic / payload)
+  manufacturer: ""      # Default manufacturer for VDA5050 topics
+  serial_number: ""  # Robot AGV serial (must match VDA 5050 state topic / payload)
   map_id: "mowbot_field"           # VDA5050 NodePosition.mapId for PATH orders (match AGV map)
 
 # MQTT Broker Settings
@@ -70,3 +70,12 @@ docker_startup_sequence:
 # If true, stop all configured docker_containers keys before startup sequence.
 # This only affects containers listed in docker_containers (safe allowlist).
 docker_reset_on_startup: false
+
+# Initial Map Center Coordinates (used when robot GPS is not yet fixed/initialized)
+map:
+  initial_latitude: 36.575298
+  initial_longitude: 128.676573
+
+# Network and Latency Checker Settings
+network:
+  check_interval_seconds: 1.0  # Cadence for external internet reachability and ping timing check
