@@ -1,81 +1,60 @@
-# General Application Settings
-# MQTT state topic shape: uagv/v2/<manufacturer>/<serial>/state  e.g. uagv/v2/MowbotTech/mowbot_001/state
-general:
-  manufacturer: ""      # Default manufacturer for VDA5050 topics
-  serial_number: ""  # Robot AGV serial (must match VDA 5050 state topic / payload)
-  map_id: "mowbot_field"           # VDA5050 NodePosition.mapId for PATH orders (match AGV map)
-
-# MQTT Broker Settings
-# Note: In production, these are often overridden by encrypted DB or Env Vars
 broker:
-  host: "localhost"           # Deploy: broker on same machine. LAN lab test: override via config_local.yaml or MOWBOT_MQTT_HOST
-  port: 1883                  # MQTT broker port (8883 for HiveMQ TLS)
-  use_tls: false              # Set to true for HiveMQ Cloud
-  user: ""                    # MQTT username
-  password: ""                # MQTT password
-
-# Teach-in missions (JSON) written under project root by default
-missions:
-  directory: "/etc/mowbot_data/missions"
-  max_start_distance_m: 50.0  # warn if robot is farther than this from 1st waypoint; 0 disables
-
-# Teach-in validation (POLY)
-# - poly_max_close_gap_m: first and last waypoint must be within this distance (m) to close the loop; <=0 disables
-# - poly_min_area_m2: reject polygons smaller than this (m²); <=0 disables
-# - poly_reject_self_intersection: reject save (and warn live) when boundary edges cross
-teach_in:
-  poly_max_close_gap_m: 5.0
-  poly_min_area_m2: 0.0
-  poly_reject_self_intersection: true
-  recording:
-    sample_interval_s: 2.0  # fixed-interval logging cadence during AUTO-RECORD
-  post_process:
-    enable: true
-    min_dist_m: 0.2
-    corner_threshold_deg: 15.0
-    rdp_epsilon_path_m: 0.2
-    rdp_epsilon_poly_m: 0.15
-
-# POLY → coverage path (boustrophedon sweep; preview + execute)
+  host: localhost
+  password: ''
+  port: 1883
+  use_tls: false
+  user: ''
 coverage:
+  max_waypoints: 2000
+  min_turn_radius_m: 0.0
   mow_width_m: 0.5
   overlap_pct: 10.0
-  sweep_angle_deg: null  # null = align passes perpendicular to longest boundary edge
-  max_waypoints: 2000
-  min_turn_radius_m: 0.0  # 0 = sharp turns (legacy); e.g. 0.5 for 50cm radius arcs at stripe ends
-  stripe_point_spacing_m: 1.0  # 0 disables stripe densification; e.g. 0.75 for interior points every 75cm
-
+  stripe_point_spacing_m: 1.0
+  sweep_angle_deg: null
 docker_containers:
+  app:
+    container_name: mowbot_app
   bringup_and_sensing:
     container_name:
-      - mowbot_uros_agent
-      - mowbot_bringup_and_sensing
+    - mowbot_uros_agent
+    - mowbot_bringup_and_sensing
   localization:
     container_name: mowbot_localization
   navigation:
     container_name: mowbot_navigation
-  app:
-    container_name: mowbot_app
-
-docker_startup_sequence:
-  - key: bringup_and_sensing
-    settle_time_s: 5
-  - key: localization
-    settle_time_s: 5
-  - key: navigation
-    settle_time_s: 3
-  - key: app
-    settle_time_s: 2
-
-# If true, stop all configured docker_containers keys before startup sequence.
-# This only affects containers listed in docker_containers (safe allowlist).
 docker_reset_on_startup: false
-
-# Initial Map Center Coordinates (used when robot GPS is not yet fixed/initialized)
+docker_startup_sequence:
+- key: bringup_and_sensing
+  settle_time_s: 5
+- key: localization
+  settle_time_s: 5
+- key: navigation
+  settle_time_s: 3
+- key: app
+  settle_time_s: 2
+general:
+  manufacturer: ''
+  map_id: mowbot_field
+  serial_number: ''
 map:
   initial_latitude: 36.575298
   initial_longitude: 128.676573
-
-# Network and Latency Checker Settings
+missions:
+  directory: /etc/mowbot_data/missions
+  max_start_distance_m: 50.0
 network:
-  check_interval_seconds: 1.0  # Cadence for external internet reachability and ping timing check
+  check_interval_seconds: 1.0
+recording:
+  sample_interval_s: 2.0
+teach_in:
+  poly_max_close_gap_m: 5.0
+  poly_min_area_m2: 0.0
+  poly_reject_self_intersection: true
+  post_process:
+    corner_threshold_deg: 15.0
+    enable: true
+    min_dist_m: 0.2
+    rdp_epsilon_path_m: 0.2
+    rdp_epsilon_poly_m: 0.15
+  recording:
+    sample_interval_s: 2.0
