@@ -33,9 +33,9 @@ docker_startup_sequence:
 - key: app
   settle_time_s: 2
 general:
-  manufacturer: ''
+  manufacturer: 'MowbotTech'
   map_id: mowbot_field
-  serial_number: ''
+  serial_number: 'mowbot_001'
 map:
   initial_latitude: 36.575298
   initial_longitude: 128.676573
