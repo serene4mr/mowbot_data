@@ -16,7 +16,6 @@ broker:
 
 # Teach-in missions (JSON) written under project root by default
 missions:
-  directory: "/etc/mowbot_data/missions"
   max_start_distance_m: 50.0  # warn if robot is farther than this from 1st waypoint; 0 disables
 
 # Teach-in validation (POLY)
