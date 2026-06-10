@@ -103,7 +103,7 @@ global_costmap:
       always_send_full_costmap: true
       footprint: '[ [-0.775, 0.7], [0.775, 0.7], [0.775, -0.7], [-0.775, -0.7] ]'
       global_frame: map
-      height: 10
+      height: 50
       inflation_layer:
         cost_scaling_factor: 3.0
         inflation_radius: 0.75
@@ -169,7 +169,7 @@ global_costmap:
       track_unknown_space: false
       update_frequency: 1.0
       use_sim_time: false
-      width: 10
+      width: 50
 local_costmap:
   local_costmap:
     ros__parameters:

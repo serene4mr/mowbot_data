@@ -40,7 +40,6 @@ map:
   initial_latitude: 36.575298
   initial_longitude: 128.676573
 missions:
-  directory: /etc/mowbot_data/missions
   max_start_distance_m: 50.0
 network:
   check_interval_seconds: 1.0
