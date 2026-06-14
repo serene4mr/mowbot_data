@@ -1,0 +1,46 @@
+services:
+  demo:
+  tms:
+    use_grid_names: true
+    origin: 'nw'
+  wmts:
+  wms:
+    md:
+      title: MapProxy Satellite Proxy
+      abstract: Caching Satellite imagery with selectable sources.
+
+# Exposes a single layer named "satellite" to the client application
+layers:
+  - name: satellite
+    title: Satellite Imagery
+    # To switch sources, toggle the comments on the lines below:
+    sources: [google_satellite_cache] # <-- Use Google Satellite
+    # sources: [arcgis_satellite_cache] # <-- Use ArcGIS Satellite
+
+# Configures the local caching layers
+caches:
+  google_satellite_cache:
+    grids: [gm_grid]
+    sources: [google_satellite_source]
+
+  arcgis_satellite_cache:
+    grids: [gm_grid]
+    sources: [arcgis_satellite_source]
+
+# Defines the upstream tile server sources
+sources:
+  google_satellite_source:
+    type: tile
+    url: http://mt0.google.com/vt/lyrs=s@0&hl=en&x=%(x)s&y=%(y)s&z=%(z)s
+    grid: gm_grid
+
+  arcgis_satellite_source:
+    type: tile
+    url: https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/%(z)s/%(y)s/%(x)s
+    grid: gm_grid
+
+grids:
+  gm_grid:
+    base: GLOBAL_WEBMERCATOR
+
+globals:
