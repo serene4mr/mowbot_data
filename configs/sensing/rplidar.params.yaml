@@ -8,3 +8,10 @@
       inverted: false            # Boolean
       angle_compensate: true     # Boolean
       scan_mode: "DenseBoost"
+      scan_frequency: 10.0       # Hz
+      # Auto-reconnect after consecutive grabScanDataHq failures (USB unplug, link loss)
+      auto_reconnect: true
+      fail_count_threshold: 3    # consecutive grab failures before reconnect
+      reconnect_initial_delay_ms: 500
+      reconnect_max_delay_ms: 10000
+      reconnect_max_attempts: 0  # 0 = unlimited

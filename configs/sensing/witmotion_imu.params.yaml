@@ -7,6 +7,10 @@
       polling_interval: 5 # ms
       timeout_ms: 150 # ms
       restart_service_name: /restart_imu
+      auto_reconnect: true
+      reconnect_initial_delay_ms: 500
+      reconnect_max_delay_ms: 10000
+      reconnect_max_attempts: 0
       imu_publisher:
         topic_name: /imu
         frame_id: imu_link
